@@ -33,9 +33,6 @@ public class GreetingResource {
 	@Inject 
 	IPostService postService;
 	
-	//@Inject
-	//PostsDao dao;
-	
 	public GreetingResource() {}
     
 	@Inject
