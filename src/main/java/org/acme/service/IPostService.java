@@ -1,11 +1,12 @@
 package org.acme.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.acme.entity.Post;
 
 public interface IPostService {
-	List<Post> posts();
+	List<Post> posts() throws SQLException;
 	
 	Post create(Post post);
 	

@@ -19,6 +19,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
+import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -41,7 +42,7 @@ public class GreetingResource {
 	@Operation(summary = "List of posts", description = "List all posts")
     @APIResponse(responseCode = "200", description = "posts listed", content = @Content(schema = @Schema(implementation = Post.class, type = SchemaType.ARRAY)))
 	@GET
-	public List<Post> getPosts() {
+	public List<Post> getPosts() throws SQLException {
         //return dao.getAll();
 		return postService.posts();
     }
