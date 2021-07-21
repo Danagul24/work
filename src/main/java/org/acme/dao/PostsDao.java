@@ -24,7 +24,8 @@ public class PostsDao {
 
 	
 	private Logger log = LoggerFactory.getLogger(PostsDao.class);
-	
+
+
 	public PostsDao(){
 
 	}
@@ -190,6 +191,7 @@ public class PostsDao {
 			throwables.printStackTrace();
 		}
 	}
+
 
 
 }
