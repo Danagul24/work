@@ -1,9 +1,6 @@
-package org.acme;
+package org.acme.retrofit;
 
-import io.quarkus.test.common.http.TestHTTPEndpoint;
-import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.acme.resource.GreetingResource;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -14,116 +11,125 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.core.MediaType;
 
-import java.net.URL;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
-
 @QuarkusTest
-@Tag(name = "post")
+@Tag(name = "comment")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestHTTPEndpoint(GreetingResource.class)
-class GreetingResourceTest {
-    @Test
-    @Order(2)
-    void getPosts() {
-        given()
-                .when()
-                .get()
-                .then()
-                .statusCode(200);
-    }
+class CommentResourceTest {
 
     @Test
-    @Order(2)
-    void getPost() {
+    @Order(1)
+    void getComments() {
         given()
-                .pathParam("id", 1)
                 .when()
-                .get( "/{id}")
+                .get("/comments")
                 .then()
                 .statusCode(200);
     }
 
     @Test
     @Order(1)
-    void getPostNotFound() {
+    void getComment() {
+        given()
+                .pathParam("id", 1)
+                .when()
+                .get("/comments/{id}")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    @Order(1)
+    void getCommentNotFound() {
         given()
                 .pathParam("id", 600)
                 .when()
-                .get("/{id}")
+                .get("/comments/{id}")
                 .then()
                 .statusCode(400);
     }
     @Test
-    @Order(1)
-    void createPost() {
+    @Order(2)
+    void createComment() {
         JsonObject jsonObject =
                 Json.createObjectBuilder()
+                        .add("postId", 5)
                         .add("name", "Dana")
-                        .add("title", "ddvdf")
+                        .add("email", "ddvdf")
+                        .add("body", "vdsv")
                         .build();
         given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jsonObject.toString())
                 .when()
-                .post()
+                .post("/comments")
                 .then()
                 .statusCode(201);
     }
 
     @Order(4)
     @Test
-    void deletePost() {
+    void deleteComment() {
         given()
                 .pathParam("id", 1)
                 .when()
-                .delete("{id}")
+                .delete("/comments/{id}")
                 .then()
                 .statusCode(204);
+        given()
+                .pathParam("id", 1)
+                .when()
+                .get("/comments/{id}")
+                .then()
+                .statusCode(200);
     }
 
     @Order(4)
     @Test
-    void deletePostNotFound() {
+    void deleteCommentNotFound() {
         given()
                 .pathParam("id", 2000)
                 .when()
-                .delete("{id}")
+                .delete("/comments/{id}")
                 .then()
-                .statusCode(400);
+                .statusCode(204);
+        //.statusCode(204);
     }
 
     @Order(3)
     @Test
-    void updatePost() {
+    void updateComment() {
         JsonObject jsonObject = Json.createObjectBuilder()
+                .add("postId", 5)
                 .add("name", "Dana")
-                .add("title", "vsvs")
+                .add("email", "vsvs")
+                .add("body", "vds")
                 .build();
         given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jsonObject.toString())
                 .pathParam("id", 1)
                 .when()
-                .put("{id}")
+                .put("/comments/{id}")
                 .then()
                 .statusCode(200);
     }
 
     @Order(3)
     @Test
-    void updatePostNotFound() {
+    void updateCommentNotFound() {
         JsonObject jsonObject = Json.createObjectBuilder()
+                .add("postId", 5)
                 .add("name", "Dana")
-                .add("title", "vsvs")
+                .add("email", "vsvs")
+                .add("body", "vds")
                 .build();
         given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(jsonObject.toString())
                 .pathParam("id", 600)
                 .when()
-                .put("{id}")
+                .put("/comments/{id}")
                 .then()
                 .statusCode(400);
     }

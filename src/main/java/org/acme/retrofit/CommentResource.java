@@ -13,18 +13,17 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "comments")
 @Path("/comments")
 @Produces(MediaType.APPLICATION_XML)
-public class Main {
+public class CommentResource {
     @Inject
     Controller controller ;
 
-    public Main() { }
+    public CommentResource() { }
 
     @Operation(summary = "List of Comments", description = "List all comments")
     @APIResponse(responseCode = "200", description = "comments listed", content = @Content(schema = @Schema(implementation = Comment.class, type = SchemaType.ARRAY)))

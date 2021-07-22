@@ -22,13 +22,14 @@ public class Post {
 	@NotBlank(message="Title may not be blank")
 	@Schema(name = "title", description = "Title of post", example = "default title")
 	String title;
-	
+	{
+		id=id+1;
+	}
 	public Post(){		
 	}
 	public Post(String name, String title) {
 		this.name = name;
 		this.title = title;
-		this.id = id + 1;
 	}
 	public int getId() {
 		return this.id;
