@@ -3,7 +3,10 @@ package org.acme.retrofit;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.xml.bind.annotation.*;
 
+@XmlRootElement(name = "comment")
+@XmlType(propOrder = {"id", "name", "body"})
 @Entity
 @Schema(name = "Comment", description = "Comment with attributes")
 public class Comment {
@@ -18,6 +21,7 @@ public class Comment {
     @NotBlank(message = "Name should not be blank")
     @Schema(name = "name", description = "Name of Comment", example = "default_name")
     private String name;
+
 
     @NotBlank(message = "Email should not be blank")
     @Schema(name = "email", description = "Email of Comment", example = "default_email")
@@ -36,7 +40,7 @@ public class Comment {
         this.email = email;
         this.body = body;
     }
-
+    @XmlAttribute
     public int getId() {
         return id;
     }
@@ -44,6 +48,7 @@ public class Comment {
         this.id = id;
     }
 
+    @XmlTransient
     public int getPostId() {
         return postId;
     }
@@ -58,6 +63,7 @@ public class Comment {
         this.body = body;
     }
 
+    @XmlElement(name = "title")
     public String getName() {
         return name;
     }
@@ -65,6 +71,7 @@ public class Comment {
         this.name = name;
     }
 
+    @XmlTransient
     public String getEmail() {
         return email;
     }

@@ -11,7 +11,7 @@ public class Controller {
     static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
     public CommentAPI commentAPI;
 
-    public Controller() throws IOException {
+    public Controller()  {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

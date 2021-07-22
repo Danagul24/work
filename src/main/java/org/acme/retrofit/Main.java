@@ -13,12 +13,13 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "comments")
 @Path("/comments")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_XML)
 public class Main {
     @Inject
     Controller controller ;
@@ -29,7 +30,8 @@ public class Main {
     @APIResponse(responseCode = "200", description = "comments listed", content = @Content(schema = @Schema(implementation = Comment.class, type = SchemaType.ARRAY)))
     @GET
     public List<Comment> getComments() throws IOException {
-        return controller.getAPI().getComments().execute().body();
+        List<Comment> comments = controller.getAPI().getComments().execute().body();
+        return comments;
     }
 
     @Operation(summary = "Comment by id", description = "Get comment by Id")
@@ -39,7 +41,7 @@ public class Main {
     @Path("/{id}")
     public Comment getComment(@PathParam("id") int id) throws IOException {
         retrofit2.Response<Comment> rs =  controller.getAPI().getCommentById(id).execute();
-        if (rs.isSuccessful()==false){
+        if (!rs.isSuccessful()){
             throw new BadRequestException("sdfsd");
         }
         return rs.body();
@@ -47,6 +49,7 @@ public class Main {
 
     @Operation(summary = "Create Comment", description = "Create new comment")
     @APIResponse(responseCode = "201", description = "comment created")
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
     public Response createComment(@Valid Comment comment) throws IOException {
         Comment createdComment = controller.getAPI().createComment(comment).execute().body();
@@ -59,8 +62,8 @@ public class Main {
     @DELETE
     @Path("/{id}")
     public void deleteComment(@PathParam("id") int id) throws IOException {
-        retrofit2.Response rs = controller.getAPI().deleteComment(id).execute();
-        if (rs.isSuccessful() == false){
+        retrofit2.Response<Comment> rs = controller.getAPI().deleteComment(id).execute();
+        if (!rs.isSuccessful()){
             throw new BadRequestException("xdx");
         }
     }
@@ -68,14 +71,15 @@ public class Main {
     @Operation(summary = "Update comment", description = "Update comment by id")
     @APIResponse(responseCode = "200", description = "comment updated")
     @APIResponse(responseCode = "400", description = "comment not found", content = @Content(schema = @Schema(implementation = HttpError.class)))
+    @Consumes(MediaType.APPLICATION_JSON)
     @PUT
     @Path("/{id}")
     public Comment updateComment(@PathParam("id") int id, @Valid Comment comment) throws IOException {
-        retrofit2.Response rs = controller.getAPI().updateComment(id, comment).execute();
-        if (!rs.isSuccessful()){
+        retrofit2.Response<Comment> rs = controller.getAPI().updateComment(id, comment).execute();
+        if (!rs.isSuccessful()) {
             throw new BadRequestException("fgd");
         }
-        return (Comment) rs.body();
+        return rs.body();
     }
 
 
